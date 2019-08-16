@@ -1,0 +1,33 @@
+Package: MetaModelFitR
+Type: Package
+Title: Testing Model Fit in Meta-Analysis Models
+Version: 0.1.0
+Author: Jeffrey C. Hoover
+Maintainer: Jeffrey C. Hoover <jhoover4@ku.edu>
+Description: This package uses Monte Carlo resampling and Posterior Predictive Model Checks to test model fit in meta-analysis models. The results are presented analytically using Monte Carlo p-values and Posterior Predictive p-values (PPP-values). Graphical results are also saved for examination and insertion into manuscripts.
+License: GPL-3
+Depends:
+    R (>= 3.5.0)
+Imports:
+    backports (>= 1.1.4),
+    coda (>= 0.19-3),
+    colorblindr (>= 0.1.0),
+    colorspace (>= 1.4-1),
+    dplyr (>= 0.8.3),
+    ggplot2 (>= 3.2.0),
+    glue (>= 1.3.1),
+    grDevices (>= 3.6.0),
+    here (>= 0.1),
+    metafor (>= 2.1-0),
+    readxl (>= 1.3.1),
+    rjags (>= 4-8),
+    rstan (>= 2.18.2),
+    runjags (>= 2.0.4-2),
+    tibble (>= 2.1.3)
+Suggests: 
+    lintr (>= 1.0.3),
+    testthat (>= 2.1.0)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1

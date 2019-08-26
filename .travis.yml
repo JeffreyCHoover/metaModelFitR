@@ -23,6 +23,7 @@ addons:
 
 before_install:
   - wget -qO- https://github.com/yihui/tinytex/raw/master/tools/download-travis-linux.sh | sh
+  - R -e 'source("https://install-github.me/r-lib/remotes")'
 
 after_success:
     - Rscript -e 'covr::codecov()'

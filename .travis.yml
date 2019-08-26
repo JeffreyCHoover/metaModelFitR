@@ -23,6 +23,7 @@ addons:
 
 before_install:
   - wget -qO- https://github.com/yihui/tinytex/raw/master/tools/download-travis-linux.sh | sh
+  - sudo apt-get install jags
 
 after_success:
     - Rscript -e 'covr::codecov()'

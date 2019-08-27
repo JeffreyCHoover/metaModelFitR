@@ -6,45 +6,21 @@ init:
         $ErrorActionPreference = "Stop"
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
+
 install:
   ps: Bootstrap
 
 cache:
   - C:\RLibrary
-  - C:\Program Files (x86)\Pandoc\
-
-# Adapt as necessary starting from here
-branches:
-  only:
-    - master
 
 environment:
   NOT_CRAN: true
-  USE_RTOOLS: true
-  global:
-    WARNINGS_ARE_ERRORS: 1
-    _R_CHECK_SYSTEM_CLOCK_: FALSE
+  # env vars that may need to be set, at least temporarily, from time to time
+  # see https://github.com/krlmlr/r-appveyor#readme for details
+  # USE_RTOOLS: true
+  # R_REMOTES_STANDALONE: true
 
-  matrix:
-  - R_VERSION: oldrel
-    R_ARCH: x64
-    GCC_PATH: mingw_64
-
-  - R_VERSION: release
-    R_ARCH: x64
-    GCC_PATH: mingw_64
-
-  - R_VERSION: devel
-    R_ARCH: x64
-    GCC_PATH: mingw_64
-
-before_test:
-  - ps: >-
-      if (-Not (Test-Path "C:\Program Files (x86)\Pandoc\")) {
-        cinst pandoc
-      }
-  - ps: $env:Path += ";C:\Program Files (x86)\Pandoc\"
-  - pandoc -v
+# Adapt as necessary starting from here
 
 build_script:
   - travis-tool.sh install_deps

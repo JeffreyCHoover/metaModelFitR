@@ -28,7 +28,7 @@ before_install:
   - sudo apt-get install jags
 
 after_success:
-    - Rscript -e 'covr::codecov()'
+    - Rscript -e 'covr::codecov(type = "all")'
 
 env:
   global:

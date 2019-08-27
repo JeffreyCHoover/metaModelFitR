@@ -11,6 +11,8 @@ cache:
   directories:
     - $HOME/.TinyTeX
 
+warnings_are_errors: false
+
 r:
   - oldrel
   - release

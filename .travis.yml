@@ -27,9 +27,6 @@ before_install:
   - wget -qO- https://github.com/yihui/tinytex/raw/master/tools/download-travis-linux.sh | sh
   - sudo apt-get install jags
 
-after_success:
-    - Rscript -e 'covr::codecov(type = "all")'
-
 env:
   global:
     - R_REMOTES_NO_ERRORS_FROM_WARNINGS: true

@@ -49,9 +49,8 @@ meta_retrieve <- function(meta, fixed = FALSE)
 simulate <- function(effect, effect_sd, weight, weight_sd, studies,
                      iter = 100000)
 {
-  results <- matrix(nrow = iter, ncol = 7, dimnames = list(c(1:iter),
-                                                           c("Median Effect",
-                                                             "Smallest Effect",
+  results <- matrix(nrow = iter, ncol = 6, dimnames = list(c(1:iter),
+                                                           c("Smallest Effect",
                                                              "Largest Effect",
                                                              "Mean Weight",
                                                              "Smallest Weight",
@@ -74,13 +73,12 @@ simulate <- function(effect, effect_sd, weight, weight_sd, studies,
       j <- j + 1
     }
 
-    results[i, 1] <- stats::median(step[,1])
-    results[i, 2] <- min(step[,1])
-    results[i, 3] <- max(step[,1])
-    results[i, 4] <- mean(step[,2])
-    results[i, 5] <- min(step[,2])
-    results[i, 6] <- max(step[,2])
-    results[i, 7] <- sum(step[,1] * step[,2]) / sum(step[,2])
+    results[i, 1] <- min(step[,1])
+    results[i, 2] <- max(step[,1])
+    results[i, 3] <- mean(step[,2])
+    results[i, 4] <- min(step[,2])
+    results[i, 5] <- max(step[,2])
+    results[i, 6] <- sum(step[,1] * step[,2]) / sum(step[,2])
 
     i <- i + 1
   }

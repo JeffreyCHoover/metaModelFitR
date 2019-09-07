@@ -465,8 +465,7 @@ diagMCMC <- function(codaObject, parName = varnames(codaObject)[1], filename) {
           ggplot2::geom_line(ggplot2::aes_string(x = "row_num", y = parName,
                                         color = "chain", group = "chain"),
                     stat = "identity", show.legend = FALSE) +
-          ggplot2::labs(x = "Iteration", y = "Parameter Value") %>%
-          ggplot2::scale_x_discrete(palette_OkabeIto))
+          ggplot2::labs(x = "Iteration", y = "Parameter Value")
   grDevices::dev.off()
 
   x_matrix = NULL

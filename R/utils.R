@@ -438,7 +438,6 @@ diagMCMC <- function(codaObject, parName = varnames(codaObject)[1], filename) {
     dir.create(here("/diagnostics"))
     }
 
-  colors <- colorblindr::palette_OkabeIto
   grDevices::jpeg(filename =
                     here::here(glue::glue("diagnostics/{filename}-{parName}-param.jpeg")),
                   width = 4,

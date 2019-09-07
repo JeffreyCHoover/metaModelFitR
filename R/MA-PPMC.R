@@ -33,7 +33,9 @@ ppmc_ma <- function(effects, weights, variances, fileName, meta, fixed = FALSE)
 
   grDevices::graphics.off() # This closes all of R's graphics windows.
 
-  theData = data.frame(effects, weights)
+  theData = data.frame(meta$yi, meta$vi) %>%
+    mutate(weights = 1 / meta.vi) %>%
+    rename(effects = meta.yi)
   fileNameRoot = fileName # For output file names.
 
   # Package the data for JAGS:

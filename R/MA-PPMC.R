@@ -16,7 +16,7 @@
 #' @return ppp A vector containing the PPP-values.
 #' @examples
 #' \dontrun{
-#' ppmc_ma(data = data, fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
+#' ppmc_ma(fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
 #' }
 #' @export
 ppmc_ma <- function(fileName, meta, fixed = FALSE)

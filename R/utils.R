@@ -283,8 +283,7 @@ calc_ppp <- function(mcmc, observed_effects, observed_weights)
   obtained_es <- sum(observed_effects * observed_weights) /sum(observed_weights)
 
   mcmc <- mcmc %>%
-    dplyr::mutate(mean_effect = mean(observed_effects),
-                  smallest_effect = min(observed_effects),
+    dplyr::mutate(smallest_effect = min(observed_effects),
                   largest_effect = max(observed_effects),
                   mean_weight = mean(observed_weights),
                   smallest_weight = min(observed_weights),
@@ -292,9 +291,6 @@ calc_ppp <- function(mcmc, observed_effects, observed_weights)
                   min_effect_ppp = dplyr::case_when(minEffect <
                                                       smallest_effect ~ 1,
                                                     TRUE ~ 0),
-                  mean_effect_ppp = dplyr::case_when(meanEffect <
-                                                       mean_effect ~ 1,
-                                                     TRUE ~ 0),
                   max_effect_ppp = dplyr::case_when(maxEffect <
                                                       largest_effect ~ 1,
                                                     TRUE ~ 0),
@@ -310,13 +306,12 @@ calc_ppp <- function(mcmc, observed_effects, observed_weights)
                   es_ppp = dplyr::case_when(ES_agg < obtained_es ~ 1,
                                             TRUE ~ 0)) %>%
     dplyr::summarize(min_effect_ppp_value = mean(min_effect_ppp),
-                     mean_effect_ppp_value = mean(mean_effect_ppp),
                      max_effect_ppp_value = mean(max_effect_ppp),
                      min_weight_ppp_value = mean(min_weight_ppp),
                      mean_weight_ppp_value = mean(mean_weight_ppp),
                      max_weight_ppp_value = mean(max_weight_ppp),
                      es_ppp_value = mean(es_ppp)) %>%
-    dplyr::select(min_effect_ppp_value, mean_effect_ppp_value,
+    dplyr::select(min_effect_ppp_value,
                   max_effect_ppp_value, min_weight_ppp_value,
                   mean_weight_ppp_value, max_weight_ppp_value, es_ppp_value)
 
@@ -343,27 +338,11 @@ plot_ppmc <- function(mcmc, observed_effects, observed_weights, meta, filename)
     dir.create(here::here("/figures"))
     }
 
-  mean_effect_obs <- mean(observed_effects)
   min_effect_obs <- min(observed_effects)
   max_effect_obs <- max(observed_effects)
   mean_weight_obs <- mean(observed_weights)
   min_weight_obs <- min(observed_weights)
   max_weight_obs <- max(observed_weights)
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-mean_effect.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = 'Xlib')
-
-  print(mcmc %>%
-          ggplot2::ggplot(ggplot2::aes(x = meanEffect)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00") +
-          ggplot2::geom_vline(xintercept = mean_effect_obs))
-
-  grDevices::dev.off()
 
   grDevices::jpeg(filename =
                     here::here(glue::glue("figures/{filename}-minimum_effect.jpeg")),

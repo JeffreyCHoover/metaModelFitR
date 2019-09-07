@@ -455,7 +455,8 @@ plot_ppmc <- function(mcmc, observed_effects, observed_weights, meta, filename)
 #' @param codaObject The Markov Chain Monte Carlo chains.
 #' @param parName A character for the name of the discrepancy measure that is
 #' being tested.
-diagMCMC <- function(codaObject, parName = varnames(codaObject)[1]) {
+#' @param filename A character for the filename root, which is used when saving graphs.
+diagMCMC <- function(codaObject, parName = varnames(codaObject)[1], filename) {
   if(!dir.exists(here("/diagnostics"))) {
     dir.create(here("/diagnostics"))
     }

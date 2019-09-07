@@ -66,7 +66,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     # priors
     tau_d ~ dunif(0.05, tau)
     for(i in 1:n) {
-      weights[i] ~ dunif(w_min, w_max)#dnorm(w_mean, w_sd)
+      weights[i] ~ dnorm(w_mean, w_sd)
       effects[i] ~ dnorm(es, es_sd)
       theta[i] ~ dnorm(es, tau_d)
       y[i] ~ dnorm(theta[i], es_se)
@@ -116,13 +116,13 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
 
   # Examine the chains:
   # Convergence diagnostics:
-  #diagMCMC( codaObject=codaSamples , parName="minEffect", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="minEffect", filename=fileNameRoot)
   #diagMCMC( codaObject=codaSamples , parName="meanEffect", filename=fileNameRoot)
-  #diagMCMC( codaObject=codaSamples , parName="maxEffect", filename=fileNameRoot)
-  #diagMCMC( codaObject=codaSamples , parName="minWeight", filename=fileNameRoot)
-  #diagMCMC( codaObject=codaSamples , parName="meanWeight", filename=fileNameRoot)
-  #diagMCMC( codaObject=codaSamples , parName="maxWeight", filename=fileNameRoot)
-  #diagMCMC( codaObject=codaSamples , parName="ES_agg", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="maxEffect", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="minWeight", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="meanWeight", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="maxWeight", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="ES_agg", filename=fileNameRoot)
 
   # # Posterior descriptives:
 

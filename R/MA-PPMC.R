@@ -116,13 +116,13 @@ ppmc_ma <- function(data, fileName, meta, fixed = FALSE)
 
   # Examine the chains:
   # Convergence diagnostics:
-  diagMCMC( codaObject=codaSamples , parName="minEffect")
-  diagMCMC( codaObject=codaSamples , parName="meanEffect")
-  diagMCMC( codaObject=codaSamples , parName="maxEffect")
-  diagMCMC( codaObject=codaSamples , parName="minWeight")
-  diagMCMC( codaObject=codaSamples , parName="meanWeight")
-  diagMCMC( codaObject=codaSamples , parName="maxWeight")
-  diagMCMC( codaObject=codaSamples , parName="ES_agg")
+  diagMCMC( codaObject=codaSamples , parName="minEffect", filename=fileNameRoot)
+  #diagMCMC( codaObject=codaSamples , parName="meanEffect", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="maxEffect", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="minWeight", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="meanWeight", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="maxWeight", filename=fileNameRoot)
+  diagMCMC( codaObject=codaSamples , parName="ES_agg", filename=fileNameRoot)
 
   # # Posterior descriptives:
 

@@ -62,7 +62,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     w_mean <- mean(w)
 
     # priors
-    tau_d ~ dunif(0.1, tau)
+    tau_d ~ dunif(0.05, tau)
     for(i in 1:n) {
       weights[i] ~ dunif(min(w), max(w))#dnorm(w_mean, w_sd)
       effects[i] ~ dnorm(es, es_sd)

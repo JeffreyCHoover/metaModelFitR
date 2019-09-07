@@ -7,10 +7,6 @@
 #'   weights, minimum study-level weights, maximum study-level effects and
 #'   pooled effect size. Graphical results are also saved for each of these
 #'   discrepancy functions.
-#' @param effects The effects parameter is an object containing the obtained study-level effect
-#'   sizes for each of the studies included in the meta-analysis.
-#' @param weights The effects parameter is an object containing the obtained study-level weights
-#'   for each of the studies included in the meta-analysis.
 #' @param fileName A character variable that serves as the stem for all saved
 #'   output files.
 #' @param meta An 'rma' object that contains the results of a meta-analysis
@@ -23,7 +19,7 @@
 #' ppmc_ma(data = data, fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
 #' }
 #' @export
-ppmc_ma <- function(effects, weights, variances, fileName, meta, fixed = FALSE)
+ppmc_ma <- function(fileName, meta, fixed = FALSE)
 {
   if(is.null(meta)) {
     stop("Meta-analysis results parameter is required.")

@@ -7,9 +7,10 @@
 #'   weights, minimum study-level weights, maximum study-level effects and
 #'   pooled effect size. Graphical results are also saved for each of these
 #'   discrepancy functions.
-#' @param data Data is an object containing the obtained study-level effect
-#'   sizes, variances, and weights for each of the studies included in the
-#'   meta-analysis.
+#' @param effects The effects parameter is an object containing the obtained study-level effect
+#'   sizes for each of the studies included in the meta-analysis.
+#' @param weights The effects parameter is an object containing the obtained study-level weights
+#'   for each of the studies included in the meta-analysis.
 #' @param fileName A character variable that serves as the stem for all saved
 #'   output files.
 #' @param meta An 'rma' object that contains the results of a meta-analysis
@@ -22,7 +23,7 @@
 #' ppmc_ma(data = data, fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
 #' }
 #' @export
-ppmc_ma <- function(data, fileName, meta, fixed = FALSE)
+ppmc_ma <- function(effects, weights, variances, fileName, meta, fixed = FALSE)
 {
   if(is.null(meta)) {
     stop("Meta-analysis results parameter is required.")
@@ -32,7 +33,7 @@ ppmc_ma <- function(data, fileName, meta, fixed = FALSE)
 
   grDevices::graphics.off() # This closes all of R's graphics windows.
 
-  theData = data
+  theData = data.frame(effects, weights)
   fileNameRoot = fileName # For output file names.
 
   # Package the data for JAGS:

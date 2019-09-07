@@ -38,7 +38,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
   if(fixed) {
   dataList = list(
     n = length(meta$yi),
-    #tau = 0.1,
+    tau = 0.1,
     es = meta$b,
     es_se = meta$se,
     w = meta$vi,
@@ -47,7 +47,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
   } else {
     dataList = list(
       n = length(meta$yi),
-      #tau = meta$tau2,
+      tau = meta$tau2,
       es = meta$b,
       es_se = meta$se,
       w = meta$vi,
@@ -62,7 +62,11 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     w_mean <- mean(w)
 
     # priors
-    tau_d ~ dunif(0, 1)
+    if(tau == 0.1){
+      tau_ = 0.1
+    } else {
+      tau_d ~ dunif(0.1, 1)
+    }
     for(i in 1:n) {
       weights[i] ~ dnorm(w_mean, w_sd)
       effects[i] ~ dnorm(es, es_sd)

@@ -68,7 +68,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
       tau_d ~ dunif(0.1, 1)
     }
     for(i in 1:n) {
-      weights[i] ~ dnorm(w_mean, w_sd)
+      weights[i] ~ dunif(min(w), max(w))#dnorm(w_mean, w_sd)
       effects[i] ~ dnorm(es, es_sd)
       theta[i] ~ dnorm(es, tau_d)
       y[i] ~ dnorm(theta[i], es_se)

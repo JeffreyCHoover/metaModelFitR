@@ -82,8 +82,8 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     minWeight <- min(weights)
     maxWeight <- max(weights)
     meanWeight <- mean(weights)
-    minEffect <- min(effects)
-    maxEffect <- max(effects)
+    minEffect <- min(y)
+    maxEffect <- max(y)
   }
   " # close quote for modelString
   writeLines(modelString , con="TEMPmodel.txt")

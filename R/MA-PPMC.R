@@ -60,11 +60,13 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     w_sd <- sd(w)
     es_sd <- sd(es_list)
     w_mean <- mean(w)
+    w_min <- min(w)
+    w_max <- max(w)
 
     # priors
     tau_d ~ dunif(0.05, tau)
     for(i in 1:n) {
-      weights[i] ~ dunif(min(w), max(w))#dnorm(w_mean, w_sd)
+      weights[i] ~ dunif(w_min, w_max)#dnorm(w_mean, w_sd)
       effects[i] ~ dnorm(es, es_sd)
       theta[i] ~ dnorm(es, tau_d)
       y[i] ~ dnorm(theta[i], es_se)
@@ -82,7 +84,6 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     meanWeight <- mean(weights)
     minEffect <- min(effects)
     maxEffect <- max(effects)
-    meanEffect <- mean(effects)
   }
   " # close quote for modelString
   writeLines(modelString , con="TEMPmodel.txt")

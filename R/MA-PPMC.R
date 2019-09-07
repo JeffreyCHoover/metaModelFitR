@@ -89,7 +89,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
   writeLines(modelString , con="TEMPmodel.txt")
 
   # Run the chains:
-  parameters = c("minEffect", "meanEffect", "maxEffect", "minWeight",
+  parameters = c("minEffect", "maxEffect", "minWeight",
                  "meanWeight", "maxWeight", "ES_agg")
   adaptSteps = 1000
   burnInSteps = 1000

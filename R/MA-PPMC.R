@@ -63,7 +63,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
 
     # priors
     if(tau == 0.1){
-      tau_ = 0.1
+      tau_d = 0.1
     } else {
       tau_d ~ dunif(0.1, 1)
     }

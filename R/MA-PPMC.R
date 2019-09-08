@@ -41,7 +41,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     tau = 0.1,
     es = meta$b,
     es_se = meta$se,
-    w = meta$vi,
+    w = 1 / meta$vi,
     es_list = meta$yi
     )
   } else {

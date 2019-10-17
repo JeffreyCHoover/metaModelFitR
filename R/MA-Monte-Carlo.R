@@ -54,7 +54,6 @@ monte_carlo_ma <- function(meta, fixed = FALSE, fileName)
                                  observed_effects = myData$effect,
                                  observed_weights = myData$weights,
                                  meta_es = meta$b)
-  print(monte_p_values)
 
   return(monte_p_values)
 }

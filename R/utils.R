@@ -49,13 +49,8 @@ meta_retrieve <- function(meta, fixed = FALSE)
 simulate <- function(effect, effect_sd, weight, weight_sd, studies,
                      iter = 100000)
 {
-  results <- matrix(nrow = iter, ncol = 6, dimnames = list(c(1:iter),
-                                                           c("Smallest Effect",
-                                                             "Largest Effect",
-                                                             "Mean Weight",
-                                                             "Smallest Weight",
-                                                             "Largest Weight",
-                                                             "Mean Effect")))
+  results <- matrix(nrow = iter, ncol = 1, dimnames = list(c(1:iter),
+                                                           c("Mean Effect")))
 
   i <- 1
   while(i <= iter)
@@ -68,17 +63,13 @@ simulate <- function(effect, effect_sd, weight, weight_sd, studies,
     while(j <= studies)
     {
       step[j, 1] <- stats::rnorm(1, mean = effect, sd = effect_sd)
-      step[j, 2] <- stats::rnorm(1, mean = weight, sd = weight_sd)
+      #step[j, 2] <- stats::rnorm(1, mean = weight, sd = weight_sd)
+      step[j, 2] <- stats::runif(1, min = min(weight), max(weight))
 
       j <- j + 1
     }
 
-    results[i, 1] <- min(step[,1])
-    results[i, 2] <- max(step[,1])
-    results[i, 3] <- mean(step[,2])
-    results[i, 4] <- min(step[,2])
-    results[i, 5] <- max(step[,2])
-    results[i, 6] <- sum(step[,1] * step[,2]) / sum(step[,2])
+    results[i, 1] <- sum(step[,1] * step[,2]) / sum(step[,2])
 
     i <- i + 1
   }
@@ -105,95 +96,10 @@ plot_simulation <- function(simulated, observed_effects, observed_weights,
                             meta_es, filename)
 {
   mean_effect_obs <- meta_es
-  min_effect_obs <- min(observed_effects)
-  max_effect_obs <- max(observed_effects)
-  mean_weight_obs <- mean(observed_weights)
-  min_weight_obs <- min(observed_weights)
-  max_weight_obs <- max(observed_weights)
 
   if(!dir.exists(here::here("/figures"))) {
     dir.create(here::here("/figures"))
   }
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-minimum_effect.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-
-  print(simulated %>%
-          ggplot2::ggplot(ggplot2::aes(x = `Smallest Effect`)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00", bins = 30) +
-          ggplot2::geom_vline(xintercept = min_effect_obs) +
-          ggplot2::labs(y = "Count"))
-
-  grDevices::dev.off()
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-maximum_effect.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-
-  print(simulated %>%
-          ggplot2::ggplot(ggplot2::aes(x = `Largest Effect`)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00", bins = 30) +
-          ggplot2::geom_vline(xintercept = max_effect_obs) +
-          ggplot2::labs(y = "Count"))
-
-  grDevices::dev.off()
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-mean_weight.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-
-  print(simulated %>%
-          ggplot2::ggplot(ggplot2::aes(x = `Mean Weight`)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00", bins = 30) +
-          ggplot2::geom_vline(xintercept = mean_weight_obs) +
-          ggplot2::labs(y = "Count"))
-
-  grDevices::dev.off()
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-minimum_weight.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-
-  print(simulated %>%
-          ggplot2::ggplot(ggplot2::aes(x = `Smallest Weight`)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00", bins = 30) +
-          ggplot2::geom_vline(xintercept = min_weight_obs) +
-          ggplot2::labs(y = "Count"))
-
-  grDevices::dev.off()
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-maximum_weight.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-
-  print(simulated %>%
-          ggplot2::ggplot(ggplot2::aes(x = `Largest Weight`)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00", bins = 30) +
-          ggplot2::geom_vline(xintercept = max_weight_obs) +
-          ggplot2::labs(y = "Count"))
-
-  grDevices::dev.off()
 
   grDevices::jpeg(filename =
                     here::here(glue::glue("figures/{filename}-mean_effect.jpeg")),
@@ -207,7 +113,6 @@ plot_simulation <- function(simulated, observed_effects, observed_weights,
           ggplot2::ggplot(ggplot2::aes(x = `Mean Effect`)) +
           ggplot2::geom_histogram(color = "black", fill = "#D55E00", bins = 45) +
           ggplot2::geom_vline(xintercept = mean_effect_obs) +
-          ggplot2::xlim(min_effect_obs, max_effect_obs) +
           ggplot2::labs(y = "Count", x = "Pooled Effect Size"))
 
   grDevices::dev.off()
@@ -232,36 +137,11 @@ ma_monte_p_value <- function(simulated, observed_effects, observed_weights,
 {
   simulated <- simulated %>%
     dplyr::mutate(mean_effect = meta_es,
-                  smallest_effect = min(observed_effects),
-                  largest_effect = max(observed_effects),
-                  mean_weight = mean(observed_weights),
-                  smallest_weight = min(observed_weights),
-                  largest_weight = max(observed_weights),
                   m_e_monte_p = dplyr::case_when(mean_effect > `Mean Effect`~ 1,
-                                                 TRUE ~ 0),
-                  s_e_monte_p = dplyr::case_when(smallest_effect >
-                                                   `Smallest Effect` ~ 1,
-                                                 TRUE ~ 0),
-                  l_e_monte_p = dplyr::case_when(largest_effect >
-                                                   `Largest Effect` ~ 1,
-                                                 TRUE ~ 0),
-                  w_monte_p = dplyr::case_when(mean_weight > `Mean Weight` ~ 1,
-                                               TRUE ~ 0),
-                  s_w_monte_p = dplyr::case_when(smallest_weight >
-                                                   `Smallest Weight` ~ 1,
-                                                 TRUE ~ 0),
-                  l_w_monte_p = dplyr::case_when(largest_weight >
-                                                   `Largest Weight` ~ 1,
                                                  TRUE ~ 0)) %>%
-    dplyr::summarize(mean_es_monte_p = mean(m_e_monte_p),
-                     smallest_effect_monte_p = mean(s_e_monte_p),
-                     largest_effect_monte_p = mean(l_e_monte_p),
-                     mean_weight_monte_p = mean(w_monte_p),
-                     smallest_weight_monte_p = mean(s_w_monte_p),
-                     largest_weight_monte_p = mean(l_w_monte_p)) %>%
-    dplyr::select(smallest_effect_monte_p, largest_effect_monte_p,
-                  mean_weight_monte_p, smallest_weight_monte_p,
-                  largest_weight_monte_p, mean_es_monte_p)
+    dplyr::summarize(mean_es_monte_p = mean(m_e_monte_p)) %>%
+    dplyr::select(mean_es_monte_p) %>%
+    dplyr::rename(es_monte_p = mean_es_monte_p)
 
   return(simulated)
 }
@@ -278,44 +158,26 @@ ma_monte_p_value <- function(simulated, observed_effects, observed_weights,
 #' meta-analysis.
 #' @return mcmc A vector containing the Postrior Predictive p-values for each of
 #' the discrepancy measures.
-calc_ppp <- function(mcmc, observed_effects, observed_weights)
+calc_ppp <- function(mcmc, discrepancy, simulated_discrepancy)# observed_effects, observed_weights)
 {
-  obtained_es <- sum(observed_effects * observed_weights) /sum(observed_weights)
+  #obtained_es <- sum(observed_effects * observed_weights) /sum(observed_weights)
 
-  mcmc <- mcmc %>%
-    dplyr::mutate(smallest_effect = min(observed_effects),
-                  largest_effect = max(observed_effects),
-                  mean_weight = mean(observed_weights),
-                  smallest_weight = min(observed_weights),
-                  largest_weight = max(observed_weights),
-                  min_effect_ppp = dplyr::case_when(minEffect <
-                                                      smallest_effect ~ 1,
-                                                    TRUE ~ 0),
-                  max_effect_ppp = dplyr::case_when(maxEffect <
-                                                      largest_effect ~ 1,
-                                                    TRUE ~ 0),
-                  min_weight_ppp = dplyr::case_when(minWeight <
-                                                      smallest_weight ~ 1,
-                                                    TRUE ~ 0),
-                  mean_weight_ppp = dplyr::case_when(meanWeight <
-                                                       mean_weight ~ 1,
-                                                     TRUE ~ 0),
-                  max_weight_ppp = dplyr::case_when(maxWeight <
-                                                      largest_weight ~ 1,
-                                                    TRUE ~ 0),
-                  es_ppp = dplyr::case_when(ES_agg < obtained_es ~ 1,
+  temp <- simulated_discrepancy %>%
+    dplyr::mutate(es_ppp = dplyr::case_when(sim_disc < discrepancy[1,1] ~ 1,
                                             TRUE ~ 0)) %>%
-    dplyr::summarize(min_effect_ppp_value = mean(min_effect_ppp),
-                     max_effect_ppp_value = mean(max_effect_ppp),
-                     min_weight_ppp_value = mean(min_weight_ppp),
-                     mean_weight_ppp_value = mean(mean_weight_ppp),
-                     max_weight_ppp_value = mean(max_weight_ppp),
-                     es_ppp_value = mean(es_ppp)) %>%
-    dplyr::select(min_effect_ppp_value,
-                  max_effect_ppp_value, min_weight_ppp_value,
-                  mean_weight_ppp_value, max_weight_ppp_value, es_ppp_value)
+    dplyr::summarize(es_ppp_value = mean(es_ppp)) %>%
+    pull()
 
-  return(mcmc)
+  return(round(temp, 4))
+
+  #mcmc <- mcmc %>%
+  #  dplyr::mutate(disc = discrepancy,
+  #                es_ppp = dplyr::case_when(ES_agg < disc ~ 1,
+  #                                          TRUE ~ 0)) %>%
+  #  dplyr::summarize(es_ppp_value = mean(es_ppp)) %>%
+  #  dplyr::select(es_ppp_value)
+  #
+  #return(mcmc)
 }
 
 #' @title Calculate Posterior Predictive p-values for meta-analysis results
@@ -332,94 +194,26 @@ calc_ppp <- function(mcmc, observed_effects, observed_weights)
 #'    performed in the metafor package.
 #' @param filename A character variable that serves as the stem for all saved
 #'`   output files.
-plot_ppmc <- function(mcmc, observed_effects, observed_weights, meta, filename)
+plot_ppmc <- function(mcmc, observed_effects, observed_weights, meta, filename,
+                      discrepancy, simulated_discrepancy)
 {
   if(!dir.exists(here::here("/figures"))) {
     dir.create(here::here("/figures"))
     }
-
-  min_effect_obs <- min(observed_effects)
-  max_effect_obs <- max(observed_effects)
-  mean_weight_obs <- mean(observed_weights)
-  min_weight_obs <- min(observed_weights)
-  max_weight_obs <- max(observed_weights)
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-minimum_effect.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-  print(mcmc %>%
-          ggplot2::ggplot(ggplot2::aes(x = minEffect)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00") +
-          ggplot2::geom_vline(xintercept = min_effect_obs))
-  grDevices::dev.off()
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-maximum_effect.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-  print(mcmc %>%
-          ggplot2::ggplot(ggplot2::aes(x = maxEffect)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00") +
-          ggplot2::geom_vline(xintercept = max_effect_obs))
-  grDevices::dev.off()
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-mean_weight.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-  print(mcmc %>%
-          ggplot2::ggplot(ggplot2::aes(x = meanWeight)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00") +
-          ggplot2::geom_vline(xintercept = mean_weight_obs))
-  grDevices::dev.off()
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-minimum_weight.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-  print(mcmc %>%
-          ggplot2::ggplot(ggplot2::aes(x = minWeight)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00") +
-          ggplot2::geom_vline(xintercept = min_weight_obs))
-  grDevices::dev.off()
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-maximum_weight.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 300,
-                  type = "cairo")
-  print(mcmc %>%
-          ggplot2::ggplot(ggplot2::aes(x = maxWeight)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00") +
-          ggplot2::geom_vline(xintercept = max_weight_obs))
-  grDevices::dev.off()
 
   grDevices::jpeg(filename =
                     here::here(glue::glue("figures/{filename}-pooled_effect.jpeg")),
                   width = 4,
                   height = 4,
                   units = "in",
-                  res = 300,
+                  res = 100,
                   type = "cairo")
-  print(mcmc %>%
-          ggplot2::ggplot(ggplot2::aes(x = ES_agg)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00") +
-          ggplot2::geom_vline(xintercept = meta$b))
+  print(simulated_discrepancy %>%
+          ggplot2::ggplot(ggplot2::aes(x = sim_disc)) +
+          ggplot2::geom_histogram(color = "black", fill = "#D55E00",
+                                  binwidth = 50) +
+          ggplot2::geom_vline(xintercept = discrepancy[1,1], size = 1.5))
+
   grDevices::dev.off()
 }
 

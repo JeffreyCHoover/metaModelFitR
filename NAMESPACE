@@ -2,3 +2,4 @@
 
 export(monte_carlo_ma)
 export(ppmc_ma)
+importFrom(magrittr,"%>%")

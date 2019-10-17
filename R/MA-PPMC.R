@@ -145,8 +145,6 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
   ppp <- calc_ppp(mcmc = as.data.frame(mcmcMat),
                   discrepancy = disc,
                   simulated_discrepancy = sim_disc)
-#                  observed_effects = theData$effect,
-#                  observed_weights = theData$weights)
 
   #graphs <- plot_ppmc(mcmc = as_tibble(mcmcMat),
   #                    discrepancy = disc,

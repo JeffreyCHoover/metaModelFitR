@@ -4,13 +4,9 @@
 \alias{ppmc_ma}
 \title{Posterior Predictive Model Check for Meta-Analysis Models}
 \usage{
-ppmc_ma(data, fileName, meta, fixed = FALSE)
+ppmc_ma(fileName, meta, fixed = FALSE)
 }
 \arguments{
-\item{data}{Data is an object containing the obtained study-level effect
-sizes, variances, and weights for each of the studies included in the
-meta-analysis.}
-
 \item{fileName}{A character variable that serves as the stem for all saved
 output files.}
 
@@ -35,6 +31,6 @@ discrepancy functions.
 }
 \examples{
 \dontrun{
-ppmc_ma(data = data, fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
+ppmc_ma(fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
 }
 }

@@ -4,13 +4,15 @@
 \alias{diagMCMC}
 \title{Perform diagnostics on the Markov Chain Monte Carlo chains}
 \usage{
-diagMCMC(codaObject, parName = varnames(codaObject)[1])
+diagMCMC(codaObject, parName, filename)
 }
 \arguments{
 \item{codaObject}{The Markov Chain Monte Carlo chains.}
 
 \item{parName}{A character for the name of the discrepancy measure that is
 being tested.}
+
+\item{filename}{A character for the filename root, which is used when saving graphs.}
 }
 \description{
 The function tests for autocorrelation, parameter values, and

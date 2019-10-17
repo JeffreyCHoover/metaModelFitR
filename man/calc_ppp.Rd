@@ -4,16 +4,16 @@
 \alias{calc_ppp}
 \title{Calculate Posterior Predictive p-values for meta-analysis results}
 \usage{
-calc_ppp(mcmc, observed_effects, observed_weights)
+calc_ppp(mcmc, discrepancy, simulated_discrepancy)
 }
 \arguments{
 \item{mcmc}{The data frame containing the Markov Chain Monte Carlo values}
 
-\item{observed_effects}{A vector of observed effect sizes from the
-meta-analysis.}
+\item{discrepancy}{A vector of observed discrepancies between the obtained
+study-level effects.}
 
-\item{observed_weights}{A vector of observed weights from the
-meta-analysis.}
+\item{simulated_discrepancy}{A vector of the simulated discrepancies of the
+simulated study-level effects.}
 }
 \value{
 mcmc A vector containing the Postrior Predictive p-values for each of

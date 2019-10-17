@@ -4,7 +4,8 @@
 \alias{plot_ppmc}
 \title{Calculate Posterior Predictive p-values for meta-analysis results}
 \usage{
-plot_ppmc(mcmc, observed_effects, observed_weights, meta, filename)
+plot_ppmc(mcmc, observed_effects, observed_weights, meta, filename,
+  discrepancy, simulated_discrepancy)
 }
 \arguments{
 \item{mcmc}{The data frame containing the Markov Chain Monte Carlo values}
@@ -20,6 +21,12 @@ performed in the metafor package.}
 
 \item{filename}{A character variable that serves as the stem for all saved
 `   output files.}
+
+\item{discrepancy}{A vector of observed discrepancies between the obtained
+study-level effects.}
+
+\item{simulated_discrepancy}{A vector of the simulated discrepancies of the
+simulated study-level effects.}
 }
 \description{
 Graph the Posterior Predictive p-values for the meta-analysis

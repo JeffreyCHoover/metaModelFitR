@@ -169,52 +169,6 @@ calc_ppp <- function(mcmc, discrepancy, simulated_discrepancy)# observed_effects
     pull()
 
   return(round(temp, 4))
-
-  #mcmc <- mcmc %>%
-  #  dplyr::mutate(disc = discrepancy,
-  #                es_ppp = dplyr::case_when(ES_agg < disc ~ 1,
-  #                                          TRUE ~ 0)) %>%
-  #  dplyr::summarize(es_ppp_value = mean(es_ppp)) %>%
-  #  dplyr::select(es_ppp_value)
-  #
-  #return(mcmc)
-}
-
-#' @title Calculate Posterior Predictive p-values for meta-analysis results
-#'
-#' @description Graph the Posterior Predictive p-values for the meta-analysis
-#' results
-#'
-#' @param mcmc The data frame containing the Markov Chain Monte Carlo values
-#' @param observed_effects A vector of observed effect sizes from the
-#' meta-analysis.
-#' @param observed_weights A vector of observed weights from the
-#' meta-analysis.
-#' @param meta An 'rma' object that contains the results of a meta-analysis
-#'    performed in the metafor package.
-#' @param filename A character variable that serves as the stem for all saved
-#'`   output files.
-plot_ppmc <- function(mcmc, observed_effects, observed_weights, meta, filename,
-                      discrepancy, simulated_discrepancy)
-{
-  if(!dir.exists(here::here("/figures"))) {
-    dir.create(here::here("/figures"))
-    }
-
-  grDevices::jpeg(filename =
-                    here::here(glue::glue("figures/{filename}-pooled_effect.jpeg")),
-                  width = 4,
-                  height = 4,
-                  units = "in",
-                  res = 100,
-                  type = "cairo")
-  print(simulated_discrepancy %>%
-          ggplot2::ggplot(ggplot2::aes(x = sim_disc)) +
-          ggplot2::geom_histogram(color = "black", fill = "#D55E00",
-                                  binwidth = 50) +
-          ggplot2::geom_vline(xintercept = discrepancy[1,1], size = 1.5))
-
-  grDevices::dev.off()
 }
 
 #' @title Perform diagnostics on the Markov Chain Monte Carlo chains

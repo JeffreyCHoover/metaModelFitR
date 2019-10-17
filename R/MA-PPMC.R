@@ -18,9 +18,13 @@
 #' \dontrun{
 #' ppmc_ma(fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
 #' }
+#' @importFrom magrittr %>%
 #' @export
 ppmc_ma <- function(fileName, meta, fixed = FALSE)
 {
+  meta.vi <- NULL
+  meta.yi <- NULL
+
   if(is.null(meta)) {
     stop("Meta-analysis results parameter is required.")
   } else if (!("rma" %in% class(meta))) {
@@ -30,8 +34,8 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
   grDevices::graphics.off() # This closes all of R's graphics windows.
 
   theData = data.frame(meta$yi, meta$vi) %>%
-    mutate(weights = 1 / meta.vi) %>%
-    rename(effects = meta.yi)
+    dplyr::mutate(weights = 1 / meta.vi) %>%
+    dplyr::rename(effects = meta.yi)
   fileNameRoot = fileName # For output file names.
 
   # Package the data for JAGS:
@@ -113,13 +117,13 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
   nChains = 3
   nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
 
-  jagsModel = jags.model( "TEMPmodel.txt" , data=dataList , #inits=initsList ,
+  jagsModel = rjags::jags.model( "TEMPmodel.txt" , data=dataList , #inits=initsList ,
                           n.chains=nChains , n.adapt=adaptSteps )
   cat( "Burning in the MCMC chain...\n" )
-  update( jagsModel , n.iter=burnInSteps )
+  stats::update( jagsModel , n.iter=burnInSteps )
   # The saved MCMC chain:
   cat( "Sampling final MCMC chain...\n" )
-  codaSamples = coda.samples( jagsModel , variable.names=parameters ,
+  codaSamples = rjags::coda.samples( jagsModel , variable.names=parameters ,
                               n.iter=nIter , thin=thinSteps )
   if ( !is.null(fileNameRoot) ) {
     save( codaSamples , file=paste0(fileNameRoot,"Mcmc.Rdata",sep="") )
@@ -135,16 +139,18 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
   disc <- sum(abs(meta$yi - rep(meta$b, length(meta$yi)))) / abs(meta$b)
 
   sim_data <- as.data.frame(mcmcMat) %>%
-    select(2:7)
+    dplyr::select(2:7)
 
   sim_disc <- as.data.frame(rowSums(abs(sim_data - mcmcMat[,1]))/
                               abs(mcmcMat[,1])) %>%
-    rename(sim_disc = 1)
+    dplyr::rename(sim_disc = 1)
 
   # # Posterior descriptives:
   ppp <- calc_ppp(mcmc = as.data.frame(mcmcMat),
                   discrepancy = disc,
                   simulated_discrepancy = sim_disc)
+#                  observed_effects = theData$effect,
+#                  observed_weights = theData$weights)
 
   #graphs <- plot_ppmc(mcmc = as_tibble(mcmcMat),
   #                    discrepancy = disc,

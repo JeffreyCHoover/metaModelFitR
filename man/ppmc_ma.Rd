@@ -4,7 +4,7 @@
 \alias{ppmc_ma}
 \title{Posterior Predictive Model Check for Meta-Analysis Models}
 \usage{
-ppmc_ma(fileName, meta, fixed = FALSE)
+ppmc_ma(fileName = NULL, meta, fixed = FALSE)
 }
 \arguments{
 \item{fileName}{A character variable that serves as the stem for all saved

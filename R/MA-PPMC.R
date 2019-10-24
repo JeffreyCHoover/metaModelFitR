@@ -20,7 +20,7 @@
 #' }
 #' @importFrom magrittr %>%
 #' @export
-ppmc_ma <- function(fileName, meta, fixed = FALSE)
+ppmc_ma <- function(fileName = NULL, meta, fixed = FALSE)
 {
   meta.vi <- NULL
   meta.yi <- NULL
@@ -31,14 +31,13 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     stop("Meta-analysis results must be an object of class `rma`.")
   }
 
-  grDevices::graphics.off() # This closes all of R's graphics windows.
+  grDevices::graphics.off()
 
   theData = data.frame(meta$yi, meta$vi) %>%
     dplyr::mutate(weights = 1 / meta.vi) %>%
     dplyr::rename(effects = meta.yi)
-  fileNameRoot = fileName # For output file names.
+  fileNameRoot = fileName
 
-  # Package the data for JAGS:
   if(fixed) {
   dataList = list(
     n = length(meta$yi),
@@ -47,7 +46,6 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     w = 1 / meta$vi
     )
 
-  # Define the JAGS model:
   modelString = "
   model {
     w_sd <- sd(w)
@@ -69,7 +67,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     minEffect <- min(y)
     maxEffect <- max(y)
   }
-  " # close quote for modelString
+  "
 
   } else {
     dataList = list(
@@ -79,7 +77,6 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
       es_v = meta$vi,
       w = 1 / (meta$vi + meta$tau2))
 
-    # Define the JAGS model:
     modelString = "
   model {
     w_sd <- sd(w)
@@ -103,12 +100,11 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     minEffect <- min(y)
     maxEffect <- max(y)
   }
-  " # close quote for modelString
+  "
   }
 
   writeLines(modelString , con="TEMPmodel.txt")
 
-  # Run the chains:
   parameters = c("y", "ES_agg")
   adaptSteps = 1000
   burnInSteps = 1000
@@ -117,11 +113,11 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
   nChains = 3
   nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
 
-  jagsModel = rjags::jags.model( "TEMPmodel.txt" , data=dataList , #inits=initsList ,
+  jagsModel = rjags::jags.model( "TEMPmodel.txt" , data=dataList ,
                           n.chains=nChains , n.adapt=adaptSteps )
   cat( "Burning in the MCMC chain...\n" )
   stats::update( jagsModel , n.iter=burnInSteps )
-  # The saved MCMC chain:
+
   cat( "Sampling final MCMC chain...\n" )
   codaSamples = rjags::coda.samples( jagsModel , variable.names=parameters ,
                               n.iter=nIter , thin=thinSteps )
@@ -129,11 +125,8 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
     save( codaSamples , file=paste0(fileNameRoot,"Mcmc.Rdata",sep="") )
   }
 
-  #save( codaSamples , file=paste0(fileNameRoot,"Mcmc.Rdata") )
   mcmcMat = as.matrix(codaSamples)
 
-  # Examine the chains:
-  # Convergence diagnostics:
   diagMCMC( codaObject=codaSamples , parName="ES_agg", filename=fileNameRoot)
 
   disc <- sum(abs(meta$yi - rep(meta$b, length(meta$yi)))) / abs(meta$b)
@@ -145,20 +138,7 @@ ppmc_ma <- function(fileName, meta, fixed = FALSE)
                               abs(mcmcMat[,1])) %>%
     dplyr::rename(sim_disc = 1)
 
-  # # Posterior descriptives:
-  ppp <- calc_ppp(mcmc = as.data.frame(mcmcMat),
-                  discrepancy = disc,
+  ppp <- calc_ppp(discrepancy = disc,
                   simulated_discrepancy = sim_disc)
-#                  observed_effects = theData$effect,
-#                  observed_weights = theData$weights)
-
-  #graphs <- plot_ppmc(mcmc = as_tibble(mcmcMat),
-  #                    discrepancy = disc,
-  #                    simulated_discrepancy = sim_disc,
-  #                    observed_effects = meta$yi,
-  #                    observed_weights = 1 / meta$vi,
-  #                    meta = meta,
-  #                    filename = fileNameRoot)
-
   return(ppp)
 }

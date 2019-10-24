@@ -43,16 +43,14 @@ meta_retrieve <- function(meta, fixed = FALSE)
 #' @description This function calculates the Posterior Predictive p-values for the
 #' meta-analysis results
 #'
-#' @param mcmc The data frame containing the Markov Chain Monte Carlo values
 #' @param discrepancy A vector of observed discrepancies between the obtained
 #' study-level effects.
 #' @param simulated_discrepancy A vector of the simulated discrepancies of the
 #' simulated study-level effects.
 #' @return mcmc A vector containing the Postrior Predictive p-values for each of
 #' the discrepancy measures.
-calc_ppp <- function(mcmc, discrepancy, simulated_discrepancy)# observed_effects, observed_weights)
+calc_ppp <- function(discrepancy, simulated_discrepancy)
 {
-  #obtained_es <- sum(observed_effects * observed_weights) /sum(observed_weights)
   es_ppp <- NULL
 
   temp <- simulated_discrepancy %>%

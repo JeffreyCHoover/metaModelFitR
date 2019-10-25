@@ -2,7 +2,7 @@ Package: MetaModelFitR
 Type: Package
 Title: Testing Model Fit in Meta-Analysis Models
 Version: 0.1.0
-Author: person(given = "Jeffrey C.",
+Authors@R: person(given = "Jeffrey C.",
              family = "Hoover",
              role = "aut",
              email = "jhoover4@ku.edu",

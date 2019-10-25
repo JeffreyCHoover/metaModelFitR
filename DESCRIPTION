@@ -4,7 +4,7 @@ Title: Testing Model Fit in Meta-Analysis Models
 Version: 0.1.0
 Authors@R: person(given = "Jeffrey C.",
              family = "Hoover",
-             role = "aut",
+             role = c("aut", "cre"),
              email = "jhoover4@ku.edu",
              comment = c(ORCID = "0000-0002-0276-0308"))
 Maintainer: Jeffrey C. Hoover <jhoover4@ku.edu>

@@ -34,3 +34,17 @@ discrepancy functions.
 ppmc_ma(fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
 }
 }
+
+\references{
+   Crawford A. Posterior predictive model checking in Bayesian networks. 2014.
+  
+   Dias S, Welton NJ, Caldwell DM, Ades AE. Checking consistency in mixed treatment comparison meta-analysis. Stat Med. 2010;29:932-944.
+  
+   Gelman A, Meng X-L, Stern H. Posterior predictive assessment of model fitness via realized discrepancies. Stat Sin. 1996;6(4):733-760.
+  
+   Park JY. Posterior predictive model checks in Cognitive Diagnostic Models. 2015.
+  
+   Sinharay S, Almond RG. Assessing Fit of Cognitive Diagnostic Models A Case Study. Educ Psychol Meas. 2007;67(2):239-257. doi:10.1177/0013164406292025
+
+   Zhu X. Assessing fit of item response models for performance assessments using Bayesian analysis. 2009.
+}

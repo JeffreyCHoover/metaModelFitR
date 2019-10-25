@@ -2,9 +2,13 @@ Package: MetaModelFitR
 Type: Package
 Title: Testing Model Fit in Meta-Analysis Models
 Version: 0.1.0
-Author: Jeffrey C. Hoover
+Author: person(given = "Jeffrey C.",
+             family = "Hoover",
+             role = "aut",
+             email = "jhoover4@ku.edu",
+             comment = c(ORCID = "0000-0002-0276-0308"))
 Maintainer: Jeffrey C. Hoover <jhoover4@ku.edu>
-Description: This package uses Monte Carlo resampling and Posterior Predictive Model Checks to test model fit in meta-analysis models. The results are presented analytically using Monte Carlo p-values and Posterior Predictive p-values (PPP-values). Graphical results are also saved for examination and insertion into manuscripts.
+Description: This package uses Posterior Predictive Model Checks to test model fit in meta-analysis models. The results are presented analytically using Posterior Predictive p-values (PPP-values). Graphical results are also saved for examination and insertion into manuscripts.
 Depends:
     R (>= 3.5.0)
 Imports:
@@ -34,3 +38,4 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
+URL: https://github.com/JeffreyCHoover/metaModelFitR

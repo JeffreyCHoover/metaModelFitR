@@ -8,7 +8,7 @@ Author: person(given = "Jeffrey C.",
              email = "jhoover4@ku.edu",
              comment = c(ORCID = "0000-0002-0276-0308"))
 Maintainer: Jeffrey C. Hoover <jhoover4@ku.edu>
-Description: This package uses Posterior Predictive Model Checks to test model fit in meta-analysis models. The results are presented analytically using Posterior Predictive p-values (PPP-values). Graphical results are also saved for examination and insertion into manuscripts.
+Description: Posterior Predictive Model Checks can be used to test model fit in meta-analysis models. `metaModelFitR` analyzes model fit in meta-analysis results using Posterior Predictive Model Checks and presents the results analytically using Posterior Predictive p-values (PPP-values). Graphical results are also saved for examination and insertion into manuscripts.
 Depends:
     R (>= 3.5.0)
 Imports:

@@ -82,7 +82,7 @@ ppmc_ma <- function(fileName = NULL, meta, fixed = FALSE)
     w_sd <- sd(w)
     es_sd <- mean(es_v)
     w_mean <- mean(w)
-    tau_d <- max(.1, tau)
+    tau_d <- max(.01, tau)
 
     # priors
     for(i in 1:n) {

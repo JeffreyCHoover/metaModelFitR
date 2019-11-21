@@ -40,8 +40,7 @@ Suggests:
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/jeffreychoover/metamodelfitr
-BugReports: https://github.com/jeffreychoover/metamodelfitr/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
 URL: https://github.com/JeffreyCHoover/metaModelFitR
+BugReports: https://github.com/jeffreychoover/metamodelfitr/issues

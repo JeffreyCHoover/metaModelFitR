@@ -115,10 +115,8 @@ ppmc_ma <- function(fileName = NULL, meta, fixed = FALSE)
 
   jagsModel = rjags::jags.model( "TEMPmodel.txt" , data=dataList ,
                           n.chains=nChains , n.adapt=adaptSteps )
-  cat( "Burning in the MCMC chain...\n" )
   stats::update( jagsModel , n.iter=burnInSteps )
 
-  cat( "Sampling final MCMC chain...\n" )
   codaSamples = rjags::coda.samples( jagsModel , variable.names=parameters ,
                               n.iter=nIter , thin=thinSteps )
   if ( !is.null(fileNameRoot) ) {

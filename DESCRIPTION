@@ -16,7 +16,7 @@ Authors@R: c(person(given = "Jeffrey C.",
                          GoogleScholar = "https://scholar.google.com/citations?hl=en&user=XhzwXXUAAAAJ",
                          Website = "https://epsy.ku.edu/neal-kingston")))
 Maintainer: Jeffrey C. Hoover <jhoover4@ku.edu>
-Description: Posterior Predictive Model Checks can be used to test model fit in meta-analysis models. 'metaModelFitR' analyzes model fit in meta-analysis results using Posterior Predictive Model Checks and presents the results analytically using Posterior Predictive p-values as proposed by Park et al. (2015) <doi:10.1504/IJQRE.2015.071738> and Zhu (2009) <UMI:3400484>. This package applies posterior predictive model checks to frequentist meta-analysis results, similar to the process used by Dias et al. (2010) <doi:10.1002/sim.3767> for Bayesian meta-analysis results.
+Description: Posterior Predictive Model Checks can be used to test model fit in meta-analysis models. 'metaModelFitR' analyzes model fit in meta-analysis results using Posterior Predictive Model Checks and presents the results analytically using Posterior Predictive p-values as proposed by Park et al. (2015) <doi:10.1504/IJQRE.2015.071738> and Zhu (2009) <https:d-scholarship.pitt.edu/10162/1/XiaowenZhu_ETD2009_Final.pdf>. This package applies posterior predictive model checks to frequentist meta-analysis results, similar to the process used by Dias et al. (2010) <doi:10.1002/sim.3767> for Bayesian meta-analysis results.
 Depends:
     R (>= 3.5.0)
 Imports:

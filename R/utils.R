@@ -96,11 +96,11 @@ plot_ppmc <- function(mcmc, observed_effects, observed_weights, meta, filename,
                   units = "in",
                   res = 100,
                   type = "cairo")
-  print(simulated_discrepancy %>%
+  simulated_discrepancy %>%
           ggplot2::ggplot(ggplot2::aes(x = sim_disc)) +
           ggplot2::geom_histogram(color = "black", fill = "#D55E00",
                                   binwidth = 50) +
-          ggplot2::geom_vline(xintercept = discrepancy[1,1], size = 1.5))
+          ggplot2::geom_vline(xintercept = discrepancy[1,1], size = 1.5)
 
   grDevices::dev.off()
 }
@@ -136,7 +136,7 @@ diagMCMC <- function(codaObject, parName, filename) {
                   units = "in",
                   res = 300,
                   type = "cairo")
-  print(codaObject[[1]] %>%
+  codaObject[[1]] %>%
           tibble::as_tibble() %>%
           dplyr::select(parName) %>%
           dplyr::mutate(chain = 1,
@@ -156,7 +156,7 @@ diagMCMC <- function(codaObject, parName, filename) {
           ggplot2::geom_line(ggplot2::aes_string(x = "row_num", y = parName,
                                         color = "chain", group = "chain"),
                     stat = "identity", show.legend = FALSE) +
-          ggplot2::labs(x = "Iteration", y = "Parameter Value"))
+          ggplot2::labs(x = "Iteration", y = "Parameter Value")
   grDevices::dev.off()
 
   x_matrix = NULL
@@ -175,7 +175,7 @@ diagMCMC <- function(codaObject, parName, filename) {
                   units = "in",
                   res = 300,
                   type = "cairo")
-  print(x_matrix %>%
+  x_matrix %>%
           cbind(y_matrix) %>%
           tibble::as_tibble() %>%
           dplyr::mutate(ess =
@@ -190,7 +190,7 @@ diagMCMC <- function(codaObject, parName, filename) {
                              y = Inf, hjust = 1, vjust = 1) +
           ggplot2::labs(x = "Lag", y = "Autocorrelation") +
           ggplot2::scale_y_continuous(breaks = c(0, .1, .2, .3, .4, .5, .6, .7,
-                                                 .8, .9, 1)))
+                                                 .8, .9, 1))
   grDevices::dev.off()
 
   x_matrix = NULL
@@ -209,7 +209,7 @@ diagMCMC <- function(codaObject, parName, filename) {
                   units = "in",
                   res = 300,
                   type = "cairo")
-  print(x_matrix %>%
+  x_matrix %>%
           cbind(y_matrix) %>%
           tibble::as_tibble() %>%
           dplyr::mutate(ess =
@@ -228,6 +228,6 @@ diagMCMC <- function(codaObject, parName, filename) {
                              y = Inf, hjust = 1, vjust = 1) +
           ggplot2::labs(x = "Parameter Value", y = "Density") +
           ggplot2::scale_y_continuous(breaks = c(0, .1, .2, .3, .4, .5, .6, .7,
-                                                 .8, .9, 1)))
+                                                 .8, .9, 1))
   grDevices::dev.off()
 }

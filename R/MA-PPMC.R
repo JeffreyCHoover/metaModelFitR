@@ -7,136 +7,103 @@
 #'   weights, minimum study-level weights, maximum study-level effects and
 #'   pooled effect size. Graphical results are also saved for each of these
 #'   discrepancy functions.
-#' @param fileName A character variable that serves as the stem for all saved
-#'   output files.
+#'
 #' @param meta An 'rma' object that contains the results of a meta-analysis
 #'   performed in the metafor package.
 #' @param fixed Logical variable specifying whether the meta-analysis results
 #'   were using a fixed-effect model (default) or a random-effects model.
+#' @param iter A double specifying the number of iterations to be used in the
+#'   posterior predictive model check.
+#'
 #' @return ppp A vector containing the PPP-values.
-#' @examples
+#'
+#' @examples {
 #' \dontrun{
-#' ppmc_ma(fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
+#' library(Rcpp)
+#' library(metafor)
+#' d = c(.2, .3, .25, .3, .4, .15)
+#' w = c(250, 300, 400, 275, 250, 200)
+#' v = 1 / w
+#'
+#' re_meta = metafor::rma(yi = d, vi = v, method = "REML")
+#'
+#' ppmc_ma(meta = re_meta, fixed = FALSE)
 #' }
+#' }
+#'
 #' @importFrom magrittr %>%
 #' @export
-ppmc_ma <- function(fileName = NULL, meta, fixed = FALSE)
-{
-  meta.vi <- NULL
-  meta.yi <- NULL
-
-  if(is.null(meta)) {
-    stop("Meta-analysis results parameter is required.")
+ppmc_ma <- function(meta, fixed = FALSE) {
+  if (is.null(meta)) {
+    stop ("Meta-analysis results parameter is required.")
   } else if (!("rma" %in% class(meta))) {
-    stop("Meta-analysis results must be an object of class `rma`.")
+    stop ("Meta-analysis results must be an object of class `rma`.")
   }
 
-  grDevices::graphics.off()
+  es <- as.numeric(meta$b)
 
-  theData = data.frame(meta$yi, meta$vi) %>%
-    dplyr::mutate(weights = 1 / meta.vi) %>%
-    dplyr::rename(effects = meta.yi)
-  fileNameRoot = fileName
-
-  if(fixed) {
-  dataList = list(
+  meta_data <- list(
     n = length(meta$yi),
-    es = meta$b,
-    es_se = meta$se,
-    w = 1 / meta$vi
-    )
+    tau = max(.01, (meta$tau2)),
+    es = es,
+    es_sd = meta$se * sqrt(length(meta$yi)),
+    w_mean = mean(1 / (meta$vi + meta$tau2)),
+    w_sd = stats::sd(1 / (meta$vi + meta$tau2))
+  )
 
-  modelString = "
+  model_string <- "
+  data {
+    int<lower=0> n;
+    real<lower=0> tau;
+    real es;
+    real w_mean;
+    real<lower=0> w_sd;
+    real<lower=0> es_sd;
+  }
+  parameters {
+    real theta[n];
+    real y[n];
+    real weights[n];
+  }
   model {
-    w_sd <- sd(w)
-    w_mean <- mean(w)
-    w_sum <- sum(w)
-
-    # priors
-    for(i in 1:n) {
-      weights[i] ~ dunif(min(w), max(w))
-      y[i] ~ dnorm(es, es_se)
-    }
-
-    for(i in 1:n) {
-      ES_ag[i] <- sum(y[i] * weights[i]) / sum(weights[i])
-    }
-
-    ES_agg <- mean(ES_ag)
-
-    minEffect <- min(y)
-    maxEffect <- max(y)
+    weights ~ normal(w_mean, w_sd * 2);
+    theta ~ normal(es, tau);
+    y ~ normal(theta, es_sd);
   }
   "
 
-  } else {
-    dataList = list(
-      n = length(meta$yi),
-      tau = meta$tau2,
-      es = meta$b,
-      es_v = meta$vi,
-      w = 1 / (meta$vi + meta$tau2))
+  fit1 <- rstan::stan(
+    model_code = model_string,
+    data = meta_data,
+    chains = 3,
+    warmup = 1000,
+    iter = 17000,
+    cores = 2,
+    refresh = 0
+  )
 
-    modelString = "
-  model {
-    w_sd <- sd(w)
-    es_sd <- mean(es_v)
-    w_mean <- mean(w)
-    tau_d <- max(.01, tau)
+  mcmc <- as.matrix(fit1)[, -ncol(as.matrix(fit1))]
+  mcmc <- mcmc[, -c(1:length(meta$yi))]
 
-    # priors
-    for(i in 1:n) {
-      weights[i] ~ dunif(min(w), max(w))
-      theta[i] ~ dnorm(es, tau_d)
-      y[i] ~ dnorm(theta[i], es_sd)
-    }
+  effects <- mcmc[, 1:(ncol (mcmc) / 2)]
+  weights <- mcmc[, ( (ncol (mcmc) / 2) + 1):ncol (mcmc)]
 
-    for(i in 1:n) {
-      ES_ag[i] <- sum(y[i] * weights[i]) / sum(weights[i])
-    }
+  num <- rowSums (effects * weights)
+  denom <- rowSums (weights)
 
-    ES_agg <- mean(ES_ag)
+  es_agg <- num / denom
 
-    minEffect <- min(y)
-    maxEffect <- max(y)
-  }
-  "
+  disc <- sum ( ( (meta$yi[1:length (meta$yi)] - rep (meta$beta[1],
+                                                 length (meta$yi))) ^ 2))
+
+  sim_disc <- vector (length = nrow(mcmc))
+
+  for (ii in 1:nrow (mcmc)) {
+    sim_disc[ii] <- sum ( (effects[ii, ] - rep (es_agg[ii],
+                                             length (effects[ii, ]))) ^ 2)
   }
 
-  writeLines(modelString , con="TEMPmodel.txt")
-
-  parameters = c("y", "ES_agg")
-  adaptSteps = 1000
-  burnInSteps = 1000
-  numSavedSteps=20000
-  thinSteps=20
-  nChains = 3
-  nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
-
-  jagsModel = rjags::jags.model( "TEMPmodel.txt" , data=dataList ,
-                          n.chains=nChains , n.adapt=adaptSteps )
-  stats::update( jagsModel , n.iter=burnInSteps )
-
-  codaSamples = rjags::coda.samples( jagsModel , variable.names=parameters ,
-                              n.iter=nIter , thin=thinSteps )
-  if ( !is.null(fileNameRoot) ) {
-    save( codaSamples , file=paste0(fileNameRoot,"Mcmc.Rdata",sep="") )
-  }
-
-  mcmcMat = as.matrix(codaSamples)
-
-  diagMCMC( codaObject=codaSamples , parName="ES_agg", filename=fileNameRoot)
-
-  disc <- sum(abs(meta$yi - rep(meta$b, length(meta$yi)))) / abs(meta$b)
-
-  sim_data <- as.data.frame(mcmcMat) %>%
-    dplyr::select(2:7)
-
-  sim_disc <- as.data.frame(rowSums(abs(sim_data - mcmcMat[,1]))/
-                              abs(mcmcMat[,1])) %>%
-    dplyr::rename(sim_disc = 1)
-
-  ppp <- calc_ppp(discrepancy = disc,
-                  simulated_discrepancy = sim_disc)
-  return(ppp)
+  ppp <- calc_ppp (discrepancy = disc,
+                   simulated_discrepancy = sim_disc)
+  return (ppp)
 }

@@ -7,8 +7,8 @@
 calc_ppp(discrepancy, simulated_discrepancy)
 }
 \arguments{
-\item{discrepancy}{A vector of observed discrepancies between the obtained
-study-level effects.}
+\item{discrepancy}{A numeric value of observed discrepancies between the
+obtained study-level effects.}
 
 \item{simulated_discrepancy}{A vector of the simulated discrepancies of the
 simulated study-level effects.}

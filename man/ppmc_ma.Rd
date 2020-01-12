@@ -4,17 +4,17 @@
 \alias{ppmc_ma}
 \title{Posterior Predictive Model Check for Meta-Analysis Models}
 \usage{
-ppmc_ma(fileName = NULL, meta, fixed = FALSE)
+ppmc_ma(meta, fixed = FALSE, iter = 17000)
 }
 \arguments{
-\item{fileName}{A character variable that serves as the stem for all saved
-output files.}
-
 \item{meta}{An 'rma' object that contains the results of a meta-analysis
 performed in the metafor package.}
 
 \item{fixed}{Logical variable specifying whether the meta-analysis results
 were using a fixed-effect model (default) or a random-effects model.}
+
+\item{iter}{A double specifying the number of iterations to be used in the
+posterior predictive model check.}
 }
 \value{
 ppp A vector containing the PPP-values.
@@ -30,21 +30,16 @@ pooled effect size. Graphical results are also saved for each of these
 discrepancy functions.
 }
 \examples{
-\dontrun{
-ppmc_ma(fileName = "re-meta_ppmc", meta = re_meta, fixed = FALSE)
-}
+{
+library(Rcpp)
+library(metafor)
+d = c(.2, .3, .25, .3, .4, .15)
+w = c(250, 300, 400, 275, 250, 200)
+v = 1 / w
+
+re_meta = metafor::rma(yi = d, vi = v, method = "REML")
+
+ppmc_ma(meta = re_meta, fixed = FALSE, iter = 1050)
 }
 
-\references{
-   Crawford A. Posterior predictive model checking in Bayesian networks. 2014.
-  
-   Dias S, Welton NJ, Caldwell DM, Ades AE. Checking consistency in mixed treatment comparison meta-analysis. Stat Med. 2010;29:932-944.
-  
-   Gelman A, Meng X-L, Stern H. Posterior predictive assessment of model fitness via realized discrepancies. Stat Sin. 1996;6(4):733-760.
-  
-   Park JY. Posterior predictive model checks in Cognitive Diagnostic Models. 2015.
-  
-   Sinharay S, Almond RG. Assessing Fit of Cognitive Diagnostic Models A Case Study. Educ Psychol Meas. 2007;67(2):239-257. doi:10.1177/0013164406292025
-
-   Zhu X. Assessing fit of item response models for performance assessments using Bayesian analysis. 2009.
 }

@@ -1,6 +1,6 @@
 library(testthat)
-library(MetaModelFitR)
+library(metamodelfitr)
 library(metafor)
 library(dplyr)
 
-test_check("MetaModelFitR")
+test_check ("metamodelfitr")

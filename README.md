@@ -8,8 +8,8 @@ status](https://travis-ci.org/JeffreyCHoover/metaModelFitR.svg?branch=master)](h
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/JeffreyCHoover/metaModelFitR?branch=master&svg=true)](https://ci.appveyor.com/project/JeffreyCHoover/metaModelFitR)
 
-The goal of metaModelFitR is to apply Monte Carlo resampling and
-posterior preditive model checks to meta-analysis results.
+metaModelFitR applies posterior preditive model checks to frequentist
+meta-analysis results.
 
 ## Installation
 

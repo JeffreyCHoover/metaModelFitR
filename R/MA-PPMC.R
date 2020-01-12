@@ -12,8 +12,6 @@
 #'   performed in the metafor package.
 #' @param fixed Logical variable specifying whether the meta-analysis results
 #'   were using a fixed-effect model (default) or a random-effects model.
-#' @param iter A double specifying the number of iterations to be used in the
-#'   posterior predictive model check.
 #'
 #' @return ppp A vector containing the PPP-values.
 #'

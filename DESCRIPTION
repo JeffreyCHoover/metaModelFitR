@@ -1,4 +1,4 @@
-Package: MetaModelFitR
+Package: metamodelfitr
 Type: Package
 Title: Testing Model Fit in Meta-Analysis Models
 Version: 0.1.0
@@ -10,13 +10,13 @@ Authors@R: c(person(given = "Jeffrey C.",
                          GoogleScholar = "https://scholar.google.com/citations?user=Ytz6zjgAAAAJ&hl=en")),
              person(given = "Neal",
              family = "Kingston",
-             role = "aut",
              email = "nkingsto@ku.edu",
+             role = "aut",
              comment = c(ORCID = "0000-0003-1870-309X",
                          GoogleScholar = "https://scholar.google.com/citations?hl=en&user=XhzwXXUAAAAJ",
                          Website = "https://epsy.ku.edu/neal-kingston")))
 Maintainer: Jeffrey C. Hoover <jhoover4@ku.edu>
-Description: Posterior Predictive Model Checks can be used to test model fit in meta-analysis models. 'metaModelFitR' analyzes model fit in meta-analysis results using Posterior Predictive Model Checks and presents the results analytically using Posterior Predictive p-values as proposed by Park et al. (2015) <doi:10.1504/IJQRE.2015.071738> and Zhu (2009) <https:d-scholarship.pitt.edu/10162/1/XiaowenZhu_ETD2009_Final.pdf>. This package applies posterior predictive model checks to frequentist meta-analysis results, similar to the process used by Dias et al. (2010) <doi:10.1002/sim.3767> for Bayesian meta-analysis results.
+Description: Posterior predictive model checks can be used to test model fit in meta-analysis models. 'metaModelFitR' analyzes model fit in meta-analysis results using posterior predictive model checks and presents the results analytically using posterior predictive p-values as proposed by Park et al. (2015) <doi:10.1504/IJQRE.2015.071738> and Zhu (2009) <https:d-scholarship.pitt.edu/10162/1/XiaowenZhu_ETD2009_Final.pdf>. This package applies posterior predictive model checks to frequentist meta-analysis results, similar to the process used by Dias et al. (2010) <doi:10.1002/sim.3767> for Bayesian meta-analysis results.
 Depends:
     R (>= 3.5.0)
 Imports:
@@ -25,13 +25,13 @@ Imports:
     dplyr (>= 0.8.3),
     ggplot2 (>= 3.2.0),
     glue (>= 1.3.1),
-    grDevices (>= 3.3.0),
     here (>= 0.1),
     magrittr (>= 1.5),
     metafor (>= 2.1),
+    Rcpp (>= 1.0.1),
     readxl (>= 1.3.1),
-    rjags (>= 4-8),
-    runjags (>= 2.0.4-2),
+    rstan (>= 2.18.2),
+    stats (>= 3.6.0),
     tibble (>= 2.1.3)
 Suggests: 
     lintr (>= 1.0.3),

@@ -12,12 +12,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-# metaModelFitR
+# metamodelfitr
 
 [![Travis build status](https://travis-ci.org/JeffreyCHoover/metaModelFitR.svg?branch=master)](https://travis-ci.org/JeffreyCHoover/metaModelFitR)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/JeffreyCHoover/metaModelFitR?branch=master&svg=true)](https://ci.appveyor.com/project/JeffreyCHoover/metaModelFitR)
 
-The goal of metaModelFitR is to apply posterior preditive model checks to meta-analysis results.
+metamodelfitr applies posterior preditive model checks to frequentist 
+meta-analysis results.
 
 ## Installation
 

@@ -1,14 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# metaModelFitR
+# metamodelfitr
 
 [![Travis build
 status](https://travis-ci.org/JeffreyCHoover/metaModelFitR.svg?branch=master)](https://travis-ci.org/JeffreyCHoover/metaModelFitR)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/JeffreyCHoover/metaModelFitR?branch=master&svg=true)](https://ci.appveyor.com/project/JeffreyCHoover/metaModelFitR)
 
-metaModelFitR applies posterior preditive model checks to frequentist
+metamodelfitr applies posterior preditive model checks to frequentist
 meta-analysis results.
 
 ## Installation

@@ -13,8 +13,6 @@ performed in the metafor package.}
 \item{fixed}{Logical variable specifying whether the meta-analysis results
 were using a fixed-effect model (default) or a random-effects model.}
 
-\item{iter}{A double specifying the number of iterations to be used in the
-posterior predictive model check.}
 }
 \value{
 ppp A vector containing the PPP-values.
@@ -30,7 +28,7 @@ pooled effect size. Graphical results are also saved for each of these
 discrepancy functions.
 }
 \examples{
-{
+\dontrun{
 library(Rcpp)
 library(metafor)
 d = c(.2, .3, .25, .3, .4, .15)
@@ -39,7 +37,7 @@ v = 1 / w
 
 re_meta = metafor::rma(yi = d, vi = v, method = "REML")
 
-ppmc_ma(meta = re_meta, fixed = FALSE, iter = 1050)
+ppmc_ma(meta = re_meta, fixed = FALSE)
 }
 
 }

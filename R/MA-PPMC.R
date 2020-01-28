@@ -10,8 +10,6 @@
 #'
 #' @param meta An 'rma' object that contains the results of a meta-analysis
 #'   performed in the metafor package.
-#' @param fixed Logical variable specifying whether the meta-analysis results
-#'   were using a fixed-effect model (default) or a random-effects model.
 #'
 #' @return ppp A vector containing the PPP-values.
 #'
@@ -25,13 +23,13 @@
 #'
 #' re_meta = metafor::rma(yi = d, vi = v, method = "REML")
 #'
-#' ppmc_ma(meta = re_meta, fixed = FALSE)
+#' ppmc_ma(meta = re_meta)
 #' }
 #' }
 #'
 #' @importFrom magrittr %>%
 #' @export
-ppmc_ma <- function(meta, fixed = FALSE) {
+ppmc_ma <- function(meta) {
   if (is.null(meta)) {
     stop ("Meta-analysis results parameter is required.")
   } else if (!("rma" %in% class(meta))) {

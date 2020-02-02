@@ -40,7 +40,7 @@ ppmc_ma <- function(meta) {
 
   meta_data <- list(
     n = length(meta$yi),
-    tau = meta$tau2,
+    tau = max(meta$tau2, 0.01),
     es = es,
     es_sd = meta$se * sqrt(length(meta$yi)),
     w_mean = mean(1 / (meta$vi + meta$tau2)),

@@ -1,7 +1,7 @@
 Package: metamodelfitr
 Type: Package
 Title: Testing Model Fit in Meta-Analysis Models
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(person(given = "Jeffrey C.",
              family = "Hoover",
              role = c("aut", "cre"),

@@ -65,3 +65,54 @@ calc_ppp <- function(discrepancy, simulated_discrepancy) {
 
   return(round(temp, 4))
 }
+
+#' @title Retrieve standard errors from confidence intervals
+#'
+#' @description This function returns the standard error from a reported
+#' confidence interval.
+#'
+#' @param estimate A `numeric` object for the point estimate of the confidence
+#' interval.
+#' @param lower A `numeric` object for the lower bound of a confidence interval.
+#' @param upper A `numeric` object for the upper bound of a confidence interval.
+#' @param ci A `numeric` object for the percentage of the confidence interval.
+#' @param corr A `boolean` object for whether the confidence interval is for a
+#' correlation coefficient.
+#'
+#' @return se A numeric object containing the standard error of the reported
+#' confidence interval.
+se_retrieve <- function(estimate, lower = NA_real_, upper = NA_real_, ci = .95,
+                        corr = FALSE) {
+  if(is.na(lower) & is.na(upper)) {
+    warning("Either the lower or upper bound of the confidence interval must be entered.")
+  } else if(!is.numeric(lower) & !is.numeric(upper)) {
+    warning("Enter a numeric value for either the lower or upper bound of the confidence interval.")
+  } else if(!is.numeric(estimate)) {
+    warning("Enter a numeric value for the point estimate")
+  } else if(!is.numeric(ci)) {
+    warning("Enter a numeric value for the confidence interval percentage.")
+  } else if((ci <= 0) | (ci >= 1)){
+    warning("Enter a value between 0 and 1 for the confidence interval percentage.")
+  }
+
+  mult <- qnorm(ci + ((1 - ci) / 2))
+
+  if(!corr) {
+    if(!is.na(upper)) {
+      se = (upper - estimate) / mult
+    } else {
+      se = (estimate - lower) / mult
+    }
+    return(se)
+  } else {
+    z_est = .5 * log((1 + estimate) / (1 - estimate))
+    if(!is.na(upper)) {
+      z_upper = .5 * log((1 + upper) / (1 - upper))
+      z_se = (z_upper - z_est) / mult
+    } else {
+      z_lower = .5 * log((1 + lower) / (1 - lower))
+      z_se = (z_est - z_lower) / mult
+    }
+    return(z_se)
+  }
+}

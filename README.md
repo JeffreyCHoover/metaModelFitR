@@ -18,4 +18,3 @@ You can install the latest version with:
 ``` r
 remotes::install_github("JeffreyCHoover/metaModelFitR")
 ```
-A test line
